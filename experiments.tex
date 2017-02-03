@@ -79,42 +79,23 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 %% formulation of MT where the hidden state needs to store the entire
 %% input sentence.
 
-\subsection{Training details}
+\subsection{训练细节}
 
-We found that the LSTM models are fairly easy to train.  We used deep
-LSTMs with 4 layers, with 1000 cells at each layer and 1000
-dimensional word embeddings, with an input vocabulary of 160,000
-and an output vocabulary of 80,000.  Thus the deep LSTM uses 8000 real 
-numbers to represent a sentence. We found deep LSTMs to
-significantly outperform shallow LSTMs, where each additional layer
-reduced perplexity by nearly 10\%, possibly due to their much larger
-hidden state.  We used a naive softmax over 80,000 words at each
-output.  The resulting LSTM has 384M parameters of which 64M are pure
-recurrent connections (32M for the ``encoder'' LSTM and 32M for the
-``decoder'' LSTM). The complete training details are given below:
+我们发现LSTM模型是相当容易训练。我们使用具有4层深度的LSTM，每层1000个神经单元和1000
+维词嵌入，输入词汇为160,000，输出词汇为80,000。因此深层LSTM使用8000个实数来表示一个句子。我们发现深层LSTM明显优于浅层LSTM，其中每个附加层将困惑度降低近 10\%，可能是由于它们隐藏状态(hidden state)更大。  在每一个输出层，我们使用一个简单的，超过80,000个单词的softmax。
+所得到的LSTM具有384M个参数，其中64M是纯
+循环连接的(32M用于“编码器”LSTM,32M用于
+``解码器''LSTM)。 完整的训练详情如下：
 \begin{itemize}
-\item We initialized all of the LSTM's parameters with the uniform distribution between
-  -0.08 and 0.08
-\item We used stochastic gradient descent without momentum,
-  with a fixed learning rate of 0.7.  After 5 epochs, we begun
-  halving the learning rate every half epoch.  We trained our models for a
-  total of 7.5 epochs.
-\item We used batches of 128 sequences for the gradient and divided it
-  the size of the batch (namely, 128).
-\item Although LSTMs tend to not suffer from the vanishing gradient
-  problem, they can have exploding gradients.  Thus we enforced a hard
-  constraint on the norm of the gradient
-  \cite{graves13c,razvan} by scaling it when its norm exceeded
-  a threshold. For each training batch, we compute $s =
-  \left\|g\right\|_2$, where $g$ is the gradient divided by 128. If $s > 5$, we set
+\item 我们用-0.08到0.08的均匀分布初始化了所有的LSTM参数
+\item 我们使用没有动量的随机梯度下降，固定学习率为0.7。 在5次迭代(epoch)之后，我们开始每半次迭代就将学习速率减半。我们的模型一共迭代了7.5次。
+\item 我们设置批次(batch)的大小为128
+\item 虽然LSTM倾向于不遭受梯度消失(vanishing gradient)的问题，但是它们会有梯度爆炸(exploding gradient)。因此，我们通过在梯度的范数超过阈值时对其进行缩放来对梯度的范数实施硬约束\cite{graves13c,razvan}。对于每一个训练批次，我们计算 $s =
+  \left\|g\right\|_2$, 其中 $g$ 是 128除以梯度的值。如果 $s > 5$, 我们设
   $g = \frac{5g}{s}$.
-\item Different sentences have different lengths.  Most sentences are
-  short (e.g., length 20-30) but some sentences are long (e.g., length
-  $>$ 100), so a minibatch of 128 randomly chosen training sentences
-  will have many short sentences and few long sentences, and as a
-  result, much of the computation in the minibatch is wasted.  To
-  address this problem, we made sure that all sentences in a
-  minibatch are roughly of the same length, yielding a 2x speedup.
+\item 不同的句子有不同的长度。大多数句子较
+短（例如，长度20-30），但一些句子很长(例如，长度
+  $>$ 100)，因此，128个随机选择的训练句子的小批(minibatch)处理将具有许多短句和很少的长句子，并且作为结果，小批量中的大量计算被浪费。为了解决这个问题，我们确保在一个小批中的所有句子大致有相同的长度，从而产生一个2倍加速。
 \end{itemize}
 
 
