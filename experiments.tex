@@ -99,21 +99,12 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 \end{itemize}
 
 
-\subsection{Parallelization}
+\subsection{并行化}
 
-A C++ implementation of deep LSTM with the configuration from the
-previous section on a single GPU processes a speed of approximately
-1,700 words per second.  This was too slow for our purposes, so we 
-parallelized our model using an 8-GPU machine.  Each layer of the LSTM
-was executed on a different GPU and communicated its activations
-to the next GPU / layer as soon as they were computed.  Our models
-have 4 layers of LSTMs, each of which resides on a separate GPU.  The remaining
-4 GPUs were used to parallelize the softmax, so each GPU was
-responsible for multiplying by a $1000\times 20000$ matrix.  The
-resulting implementation achieved a speed of 6,300 (both English and
-French) words per second with a minibatch size of 128. 
-Training took about a ten days with this implementation.
-
+深层LSTM的C ++实现使用上一节中的配置在单个GPU上处理的速度
+大约为每秒1,700个单词。这对我们的目的来说太慢了，所以我们
+使用8个GPU的机器来并行化我们的模型。LSTM的每一层在不同的GPU上执行，并且一旦它们被计算就将其激活值传送到下一个GPU层。我们的模型有4层LSTM，每层都驻留在一个单独的GPU上。剩余的4个GPU用于并行化softmax，因此每个GPU负责乘以一个$1000\times 20000$的矩阵。最终实现的速度为每秒6300个单词（英语和法语），迷你批量大小为128。
+这个实现花了大约十天来训练。
 
 \subsection{Experimental Results}
 
