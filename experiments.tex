@@ -134,55 +134,55 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 %% in order to reproducing the baseline's BLEU score with our
 %% evaluation tools.
 
-结果在表格\ref{tab:blue_fr}和
-\ref{tab:blue_fr_rescore}中展示。我们最好的结果是由集成的LSTM获得的，这些LSTM在随机初始化和随机顺序的小批次(minibatch)上是不同的。虽然LSTM系综的解码转换不优于最好的WMT'14系统，并且尽管它不能处理词汇表外的单词，但是它是第一次纯神经翻译系统在大规模机器翻译(MT)任务上优于基于短语的SMT基准系统的情况。LSTM在最好的WMT'14结果的0.5BLEU点内，如果它用于分辨1000最好基线系统列表。
-
 \begin{table}[t]
-\centering
-\begin{small}
-\begin{tabular}{|c|c|}
-\hline
-{\bf Method}  & {\bf test BLEU score (ntst14) } \\ \hline
-Bahdanau et al. \cite{bog14}  &  28.45 \\ \hline
-Baseline System  \cite{wmt14_en_fr} & 33.30 \\ \hline
-\hline
-Single forward LSTM, beam size 12 & 26.17 \\ \hline                 
-Single reversed LSTM, beam size 12 & 30.59 \\ \hline
-Ensemble of 5 reversed LSTMs, beam size 1  &  33.00 \\ \hline
-Ensemble of 2 reversed LSTMs, beam size 12  &  33.27 \\ \hline
-Ensemble of 5 reversed LSTMs, beam size 2  &  34.50 \\ \hline
-Ensemble of 5 reversed LSTMs, beam size 12  &  {\bf 34.81} \\ \hline
-\end{tabular}
-\end{small}
-\caption{The performance of the LSTM on WMT'14 English to French test
-  set (ntst14).  Note that an ensemble of 5 LSTMs with a beam of size
-  2 is cheaper than of a single LSTM with a beam of size 12.  }
-\label{tab:blue_fr}
+	\centering
+	\begin{small}
+		\begin{tabular}{|c|c|}
+			\hline
+			{\bf Method}  & {\bf test BLEU score (ntst14) } \\ \hline
+			Bahdanau et al. \cite{bog14}  &  28.45 \\ \hline
+			Baseline System  \cite{wmt14_en_fr} & 33.30 \\ \hline
+			\hline
+			Single forward LSTM, beam size 12 & 26.17 \\ \hline                 
+			Single reversed LSTM, beam size 12 & 30.59 \\ \hline
+			Ensemble of 5 reversed LSTMs, beam size 1  &  33.00 \\ \hline
+			Ensemble of 2 reversed LSTMs, beam size 12  &  33.27 \\ \hline
+			Ensemble of 5 reversed LSTMs, beam size 2  &  34.50 \\ \hline
+			Ensemble of 5 reversed LSTMs, beam size 12  &  {\bf 34.81} \\ \hline
+		\end{tabular}
+	\end{small}
+	\caption{The performance of the LSTM on WMT'14 English to French test
+		set (ntst14).  Note that an ensemble of 5 LSTMs with a beam of size
+		2 is cheaper than of a single LSTM with a beam of size 12.  }
+	\label{tab:blue_fr}
 \end{table}
 
 \begin{table}[]
-\centering
-\begin{small}
-\begin{tabular}{|c|c|}
-\hline
-{\bf Method}  & {\bf test BLEU score (ntst14) } \\ \hline
-Baseline System  \cite{wmt14_en_fr} & 33.30 \\ \hline
-Cho et al. \cite{cho14}  & 34.54 \\ \hline 
-Best WMT'14 result \cite{durrani-EtAl:2014:W14-33} &  {\bf 37.0} \\ \hline
-\hline
-Rescoring the baseline 1000-best with a single forward LSTM & 35.61 \\ \hline 
-Rescoring the baseline 1000-best with a single reversed  LSTM & 35.85 \\ \hline  %wmt_FREN_good_rescore_80k_one_rev_1.merge
-%Rescoring the LIUM 1000-best with 5 forward LSTMs  &  36.3 \\ \hline    
-Rescoring the baseline 1000-best with an ensemble of 5 reversed LSTMs  &  {\bf 36.5} \\ \hline    %wmt_FREN_good_rescore_80k_all_rev_1.merge 
-\hline
-Oracle Rescoring of the Baseline 1000-best lists    & $\sim$45 \\ \hline 
-\end{tabular}
-\end{small}
-\caption{Methods that use neural networks together with an SMT system
-  on the WMT'14 English to French test set (ntst14).}
-\label{tab:blue_fr_rescore}
+	\centering
+	\begin{small}
+		\begin{tabular}{|c|c|}
+			\hline
+			{\bf Method}  & {\bf test BLEU score (ntst14) } \\ \hline
+			Baseline System  \cite{wmt14_en_fr} & 33.30 \\ \hline
+			Cho et al. \cite{cho14}  & 34.54 \\ \hline 
+			Best WMT'14 result \cite{durrani-EtAl:2014:W14-33} &  {\bf 37.0} \\ \hline
+			\hline
+			Rescoring the baseline 1000-best with a single forward LSTM & 35.61 \\ \hline 
+			Rescoring the baseline 1000-best with a single reversed  LSTM & 35.85 \\ \hline  %wmt_FREN_good_rescore_80k_one_rev_1.merge
+			%Rescoring the LIUM 1000-best with 5 forward LSTMs  &  36.3 \\ \hline    
+			Rescoring the baseline 1000-best with an ensemble of 5 reversed LSTMs  &  {\bf 36.5} \\ \hline    %wmt_FREN_good_rescore_80k_all_rev_1.merge 
+			\hline
+			Oracle Rescoring of the Baseline 1000-best lists    & $\sim$45 \\ \hline 
+		\end{tabular}
+	\end{small}
+	\caption{Methods that use neural networks together with an SMT system
+		on the WMT'14 English to French test set (ntst14).}
+	\label{tab:blue_fr_rescore}
 \end{table}
 
+
+结果在表格\ref{tab:blue_fr}和
+\ref{tab:blue_fr_rescore}中展示。我们最好的结果是由集成的LSTM获得的，这些LSTM在随机初始化和随机顺序的小批次(minibatch)上是不同的。虽然LSTM系综的解码转换不优于最好的WMT'14系统，并且尽管它不能处理词汇表外的单词，但是它是第一次纯神经翻译系统在大规模机器翻译(MT)任务上优于基于短语的SMT基准系统的情况。LSTM在最好的WMT'14结果的0.5BLEU点内，如果它用于分辨1000最好基线系统列表。
 
 
 \subsection{在长句子上的表现}
@@ -319,7 +319,7 @@ Il y a , avec la cr\'{e}mation , `` une violence faite au corps aim\'{e} '' , \\
 %% \end{table}
 
 
-\subsection{Model Analysis}
+\subsection{模型分析}
 
 \begin{figure}[h!]
 \centering
@@ -356,13 +356,7 @@ Il y a , avec la cr\'{e}mation , `` une violence faite au corps aim\'{e} '' , \\
 %% easy to see why it should be so: the deeper LSTMs have much more
 %% hidden state, so they have an easier time storing the input sequence.
 
-One of the attractive features of our model is its ability to turn a
-sequence of words into a vector of fixed dimensionality.
-Figure~\ref{fig:embedding} visualizes some of the learned
-representations.  The figure clearly shows that the representations
-are sensitive to the order of words, while being fairly insensitive to
-the replacement of an active voice with a passive voice.  The
-two-dimensional projections are obtained using PCA.
+我们模型的一个有吸引力的特点是它能把一个单词序列变成一个固定维数的向量。图像~\ref{fig:embedding} 可视化了一些学习出来的表示法。该图清楚地显示了表示法对词的顺序敏感，同时对被动语态替换为主动语态相当不敏感。我们使用PCA获得二维投影。
 
 
 
