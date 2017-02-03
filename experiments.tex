@@ -4,21 +4,13 @@
 我们用了两种方法将我们的方法应用于WMT'14英语到法语机器翻译（MT）任务中。 我们使用它直接翻译输入句子而不参考统计机器翻译（SMT）系统，我们使用它来重新定义SMT基准的n个最佳列表。我们报告这些翻译方法的准确性，
 呈现示例翻译，并可视化所得到的句子结果。
 
-\subsection{Dataset details}
+\subsection{数据集细节}
 
-We used the WMT'14 English to French dataset.  We trained our models
-on a subset of 12M sentences consisting of 348M French words and 304M
-English words, which is a clean ``selected'' subset from
-\cite{wmt14_en_fr}. We chose this translation task and this specific
-training set subset because of the public availability of a tokenized training and
-test set together with 1000-best lists from the baseline SMT 
-\cite{wmt14_en_fr}.
+我们使用WMT'14英语到法语数据集。我们训练我们的模型在12M句子的一个子集包括348M法语单词和304M英语单词，这是一个来自\cite{wmt14_en_fr}的“选择”过的干净的子集。我们选择这个翻译任务和这个具体训练集子集，是因为分过词的(tokenized)训练和测试集以及来自基准SMT的1000个最佳列表是公共可用的\cite{wmt14_en_fr}。
 
-As typical neural language models rely on a vector representation for
-each word, we used a fixed vocabulary for both languages.  We used
-160,000 of the most frequent words for the source language and 80,000
-of the most frequent words for the target language.  Every
-out-of-vocabulary word was replaced with a special ``UNK'' token.  
+因为典型的神经语言模型依赖于每个词的向量表示，我们为这两种语言使用固定的词汇。我们用了
+源语言里最常见的160,000个单词和目标语言里最常用的8万个单词。每一个
+超纲单词都被替换为一个特殊的“UNK”符号。  
  
 %% \subsection{Sentence-level Autoencoder}
 
