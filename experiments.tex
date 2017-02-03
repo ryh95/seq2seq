@@ -86,6 +86,7 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 所得到的LSTM具有384M个参数，其中64M是纯
 循环连接的(32M用于“编码器”LSTM,32M用于
 ``解码器''LSTM)。 完整的训练详情如下：
+
 \begin{itemize}
 \item 我们用-0.08到0.08的均匀分布初始化了所有的LSTM参数
 \item 我们使用没有动量的随机梯度下降，固定学习率为0.7。 在5次迭代(epoch)之后，我们开始每半次迭代就将学习速率减半。我们的模型一共迭代了7.5次。
@@ -108,15 +109,12 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 
 \subsection{Experimental Results}
 
-We used the cased BLEU score \cite{bleu} to evaluate the quality of our
-translations. We computed our BLEU scores using \texttt{multi-bleu.pl}\footnote{
-There several variants of the BLEU score, and each variant is defined  with a perl script. } 
-on the \emph{tokenized} predictions and ground truth.
-This way of evaluating the BELU score is consistent with \cite{cho14} and \cite{bog14}, and reproduces
-the 33.3 score of \cite{wmt14_en_fr}.
-However, if we evaluate the best WMT'14 system \cite{durrani-EtAl:2014:W14-33}
-(whose predictions can be downloaded from \url{statmt.org\matrix}) in this manner, we get   
-37.0, which is greater than the 35.8 reported by \url{statmt.org\matrix}.  
+我们使用BLEU分数\cite{bleu}来评价我们翻译的质量。我们在\emph{分过词的}预测和真实数据集中使用\texttt{multi-bleu.pl}\footnote{有几个BLEU分数的变体，每个变体用perl脚本定义。}来计算我们的BLEU分数。
+这种评估BELU分数的方式与\cite{cho14}和\cite{bog14}一致，并且再现了
+\cite{wmt14_en_fr}的33.3分。
+然而，当我们以这种方式评估最好的WMT'14系统 \cite{durrani-EtAl:2014:W14-33}
+(其预测可以从 \url{statmt.org\matrix} 下载)时, 我们得到了   
+37.0分, 大于 \url{statmt.org\matrix}报告的35.8分。  
 
 %% According to , 
 %% the performance of the best English to French system on the WMT'14 \cite{durrani-EtAl:2014:W14-33}
@@ -136,16 +134,8 @@ However, if we evaluate the best WMT'14 system \cite{durrani-EtAl:2014:W14-33}
 %% in order to reproducing the baseline's BLEU score with our
 %% evaluation tools.
 
-The results are presented in tables \ref{tab:blue_fr} and
-\ref{tab:blue_fr_rescore}.  Our best results are obtained with an
-ensemble of LSTMs that differ in their random initializations and
-in the random order of minibatches.  While the decoded translations of the
-LSTM ensemble do not outperform the best WMT'14 system, it is the first time
-that a pure neural translation system outperforms a 
-phrase-based SMT baseline on a large scale MT task by a sizeable margin,
-despite its inability to handle out-of-vocabulary words.  The LSTM
-is within 0.5 BLEU points of the best WMT'14 result if it is used to rescore the 1000-best
-list of the baseline system.
+结果在表格\ref{tab:blue_fr}和
+\ref{tab:blue_fr_rescore}中展示。我们最好的结果是由集成的LSTM获得的，这些LSTM在随机初始化和随机顺序的小批次(minibatch)上是不同的。虽然LSTM系综的解码转换不优于最好的WMT'14系统，并且尽管它不能处理词汇表外的单词，但是它是第一次纯神经翻译系统在大规模机器翻译(MT)任务上优于基于短语的SMT基准系统的情况。LSTM在最好的WMT'14结果的0.5BLEU点内，如果它用于分辨1000最好基线系统列表。
 
 \begin{table}[t]
 \centering
