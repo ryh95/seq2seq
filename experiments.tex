@@ -29,41 +29,22 @@
 %% vector of a fixed dimensionality.
 
 
-\subsection{Decoding and Rescoring}
+\subsection{解码和重新计算}
 
-The core of our experiments involved training a large deep LSTM on
-many sentence pairs. We trained it by maximizing the log
-probability of a correct translation $T$ given the source sentence
-$S$, so the training objective is
-$$1/|\mathcal S|\sum_{(T,S)\in\mathcal S}\log p(T|S)$$ where $\mathcal
-S$ is the training set.  Once training is complete, we produce
-translations by finding the most likely translation according to
-the LSTM:
+我们实验的核心涉及在许多句子对上训练大型深度LSTM。我们通过最大化给定原句子$S$得出正确翻译$T$的概率的对数来训练它，所以训练的目标函数是
+$$1/|\mathcal S|\sum_{(T,S)\in\mathcal S}\log p(T|S)$$ 其中 $\mathcal
+S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻译从而生成翻译:
 \begin{equation}
 \label{eqn:decode}
 \hat{T} = \arg\max_T p(T|S)
 \end{equation}
-We search for the most likely translation using a simple left-to-right
-beam search decoder which maintains a small number $B$ of partial
-hypotheses, where a partial hypothesis is a prefix of some
-translation.  At each timestep we extend each partial hypothesis in
-the beam with every possible word in the vocabulary. This greatly
-increases the number of the hypotheses so we discard all but the $B$
-most likely hypotheses according to the model's log probability.  As soon
-as the ``$<$EOS$>$'' symbol is appended to a hypothesis, it is removed from
-the beam and is added to the set of complete hypotheses.  While this
-decoder is approximate, it is simple to implement.  Interestingly, our
-system performs well even with a beam size of 1, and a beam of
-size 2 provides most of the benefits of beam search (Table
-\ref{tab:blue_fr}).   
+我们使用一个简单的从左到右集束搜索(beam search)的解码器来查找最有可能的翻译，这个解码器保持着一个数目为$B$的部分假设(partial hypothesis)，其中一个部分假设是一些译文的前缀。在每个时间步长我们用词汇表中每个可能的单词扩展在束(beam)中的每个部分假设。这大大增加了假设(hypothesis)的数量，所以我们根据模型的对数概率舍弃所有除了$B$最可能的假设。一旦``$<$EOS$>$''符号添加到假设中，它就从束中移除，并被添加到完整假设的集合中。虽然这个解码器是近似的，但实施起来很简单。有趣的是，我们的系统即使在束尺寸为1的情况下也表现良好，束尺寸为2时提供了集束搜索的大部分益处(表格
+\ref{tab:blue_fr})。
 
 % todo:  insert note on removing very short solutions and solutions
 % that consist entirely of the /UNK/ token. 
 
-We also used the LSTM to rescore the 1000-best lists produced by the
-baseline system \cite{wmt14_en_fr}.  To rescore an n-best list, we
-computed the log probability of every hypothesis with our LSTM and
-took an even average with their score and the LSTM's score.
+我们还使用LSTM来分析基准系统生成的1000个最佳列表\cite{wmt14_en_fr}。为了分析n最佳列表，我们使用我们的LSTM计算每个假设的对数概率，并且用他们的分数和LSTM的分数取了平均值。
 
 \subsection{Reversing the Source Sentences}
 \label{sec:rev_rev}
