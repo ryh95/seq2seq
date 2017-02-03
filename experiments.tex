@@ -46,39 +46,17 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 
 我们还使用LSTM来分析基准系统生成的1000个最佳列表\cite{wmt14_en_fr}。为了分析n最佳列表，我们使用我们的LSTM计算每个假设的对数概率，并且用他们的分数和LSTM的分数取了平均值。
 
-\subsection{Reversing the Source Sentences}
+\subsection{反转源句子}
 \label{sec:rev_rev}
 
-While the LSTM is capable of solving problems with long term
-dependencies, we discovered that the LSTM learns much better when the
-source sentences are reversed (the target sentences are not reversed).  By
-doing so, the LSTM's test perplexity dropped from 5.8 to 4.7, and the 
-test BLEU scores of its decoded translations increased from 25.9 to 30.6.
+虽然LSTM能够解决长期依赖(long term dependencies)的问题，但我们发现，当源语句颠倒(目标语句不反转)时，LSTM学习得更好。通过这样做，LSTM的测试困惑度(perplexity)从5.8下降到4.7，测试其解码翻译的BLEU分数从25.9增加到30.6。
 
 
 
-While we do not have a complete explanation to this phenomenon, we
-believe that it is caused by the introduction of many short term
-dependencies to the dataset.  Normally, when we concatenate a source
-sentence with a target sentence, each word in the source sentence is
-far from its corresponding word in the target sentence. As a result,
-the problem has a large ``minimal time lag'' \cite{minimal_time_lag}.  By reversing the
-words in the source sentence, the average distance between
-corresponding words in the source and target language is unchanged.
-However, the first few words in the source language are now very close to
-the first few words in the target language, so the problem's minimal
-time lag is greatly reduced. Thus, backpropagation has an easier time
-``establishing communication'' between the source sentence and the
-target sentence, which in turn results in substantially improved overall
- performance.
+虽然我们没有这种现象的完整解释，但我们认为它是由对数据集引入许多短期依赖(short term dependencies)引起的。通常，当我们将源语句与目标语句连接起来时，源语句中的每个单词远离目标语句中的相应单词。结果是，该问题具有大的``最小时间滞后''\cite{minimal_time_lag}。通过反转源语句中的单词，源语言和目标语言中相应单词之间的平均距离不变。然而，源语言中的前几个词现在非常接近目标语言中的前几个词，所以这个问题的最小时间滞后被大大减少了。因此，反向传播(backpropagation)在源句子和目标句子之间更容易“建立通信”，这又导致整体性能有了实质上的改善。
 
-Initially, we believed that reversing the input sentences would 
-only lead to more confident predictions in the early parts of the target
-sentence and to less confident predictions in the later parts.
-However, LSTMs trained on reversed source sentences did much better on
-long sentences than LSTMs trained on the raw source sentences (see
-sec.~\ref{sec:long_sentences}), which suggests that reversing the
-input sentences results in LSTMs with better memory utilization. 
+最初，我们认为，颠倒输入的句子只会导致在目标句子的前面部分中预测的更有信心，而在后面的部分中预测的更不自信。然而，用反向源语句训练的LSTM比直接用源语句训练的LSTM效果好的多(参见
+章节 ~\ref{sec:long_sentences})，这表明逆转输入句子导致LSTM具有更好的内存利用率。
 
 
 
