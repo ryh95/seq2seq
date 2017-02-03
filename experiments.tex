@@ -107,7 +107,7 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 使用8个GPU的机器来并行化我们的模型。LSTM的每一层在不同的GPU上执行，并且一旦它们被计算就将其激活值传送到下一个GPU层。我们的模型有4层LSTM，每层都驻留在一个单独的GPU上。剩余的4个GPU用于并行化softmax，因此每个GPU负责乘以一个$1000\times 20000$的矩阵。最终实现的速度为每秒6300个单词（英语和法语），迷你批量大小为128。
 这个实现花了大约十天来训练。
 
-\subsection{Experimental Results}
+\subsection{实验结果}
 
 我们使用BLEU分数\cite{bleu}来评价我们翻译的质量。我们在\emph{分过词的}预测和真实数据集中使用\texttt{multi-bleu.pl}\footnote{有几个BLEU分数的变体，每个变体用perl脚本定义。}来计算我们的BLEU分数。
 这种评估BELU分数的方式与\cite{cho14}和\cite{bog14}一致，并且再现了
@@ -185,13 +185,11 @@ Oracle Rescoring of the Baseline 1000-best lists    & $\sim$45 \\ \hline
 
 
 
-\subsection{Performance on long sentences}
+\subsection{在长句子上的表现}
 \label{sec:long_sentences}
 
-We were surprised to discover that the LSTM did well on long
-sentences, which is shown quantitatively in figure \ref{fig:oriol}.
-Table \ref{tab:examples} presents several examples of long sentences and
-their translations. 
+我们惊讶地发现LSTM在长句子上表现良好，这定量显示在了图\ref{fig:oriol}中。
+表\ref{tab:examples}提出了长句的几个例子以及他们的翻译。
 
 \begin{table}[ht!]
 \centering
