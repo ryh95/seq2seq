@@ -1,33 +1,10 @@
-\section{Conclusion}
+\section{结论}
 
-In this work, we showed that a large deep LSTM, that has a limited 
-vocabulary and that makes almost no
-assumption about problem structure can outperform a standard SMT-based system whose vocabulary
-is unlimited on a large-scale MT task.  The success of our simple
-LSTM-based approach on MT suggests that it should do well on many
-other sequence learning problems, provided they have enough training
-data.
+在这项工作中，我们展示了一个有限词汇量的大的深层LSTM表现胜过一个标准的基于SMT的系统，在大规模的MT任务中词汇可以是无限的。我们在机器翻译上的简单的基于LSTM的方法的成功表明，只要他们有足够的训练数据，它应该在许多其他序列学习问题上做得很好。
 
-We were surprised by the extent of the improvement obtained by
-reversing the words in the source sentences.  We conclude that it is
-important to find a problem encoding that has the greatest number of
-short term dependencies, as they make the learning problem much
-simpler.  In particular, while we were unable to train a standard
-RNN on the non-reversed translation problem (shown in
-fig.~\ref{fig:translation-model2}), we believe that a standard RNN
-should be easily trainable when the source sentences are reversed (although we
-did not verify it experimentally).
+我们对通过翻转源语句中的词的顺序而获得的改进的程度感到惊讶。我们得出结论，找到一个具有最大数量的短期依赖问题编码是重要的，因为它们使学习问题更简单。特别地，尽管我们不能在非反向翻译问题（图\ref{fig:translation-model2}所示）上训练标准RNN，我们认为，当源语句颠倒时，标准的RNN应该很容易训练
+（虽然我们没有通过实验验证）。
 
-We were also surprised by the ability of the LSTM to correctly
-translate very long sentences.  We were initially convinced that the
-LSTM would fail on long sentences due to its limited memory, and other
-researchers reported poor performance on long sentences with a model
-similar to ours \cite{cho14,bog14,curse}.  And yet,
-LSTMs trained on the reversed dataset had little difficulty translating long
-sentences.
+我们也对LSTM正确翻译很长句子的能力感到惊讶。我们最初相信LSTM将由于其有限的记忆会在长句子上失败，并且其他研究人员报告过与我们类似的模型在长句子上差的性能\cite{cho14,bog14,curse}。然而，对反转数据集上训练的LSTM在翻译长句子上没有什么困难。
 
-Most importantly, we demonstrated that a simple, straightforward and a
-relatively unoptimized approach can outperform an SMT system, so
-further work will likely lead to even greater translation accuracies.  
-These results suggest that our approach will likely   
-do well on other challenging sequence to sequence problems.
+最重要的是，我们展示了一个简单，直接和相对未优化的方法，这个方法可以超越成熟的SMT系统，因此进一步的工作可能会进一步提高翻译精度。这些结果表明，我们的方法可能在其他具有挑战的序列问题上表现很好。
