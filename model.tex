@@ -1,76 +1,26 @@
 
-\section{The model}
+\section{模型}
 \label{sec:model}
 
-The Recurrent Neural Network (RNN) \cite{werbos,rumelhart1986learning}
-is a natural generalization of feedforward neural networks to
-sequences.  Given a sequence of inputs $(x_1,\ldots,x_T)$, a
-standard RNN computes a sequence of outputs $(y_1,\ldots,y_T)$ by
-iterating the following equation: 
+循环神经网络（RNN）\cite{werbos,rumelhart1986learning}是序列的前馈神经网络的自然泛化。给定输入序列$(x_1,\ldots,x_T)$，一个标准的RNN通过迭代计算输出序列$(y_1,\ldots,y_T)$算式如下：
 \begin{eqnarray*}
-h_t &=& \mathrm{sigm}\left(W^{\mathrm{hx}} x_t + W^{\mathrm{hh}} h_{t-1}\right) \\
-y_t &=& W^{\mathrm{yh}}h_t
+	h_t &=& \mathrm{sigm}\left(W^{\mathrm{hx}} x_t + W^{\mathrm{hh}} h_{t-1}\right) \\
+	y_t &=& W^{\mathrm{yh}}h_t
 \end{eqnarray*}
-The RNN can easily map sequences to sequences whenever the alignment
-between the inputs the outputs is known ahead of time. However, it is
-not clear how to apply an RNN to problems whose input and the output
-sequences have different lengths with complicated and non-monotonic
-relationships.
+只要提前知道输入和输出之间的对齐，RNN很简单就能将输入映射到输出上。然而不清楚如何将RNN应用于其输入和输出序列具有不同长度的复杂和变化的问题。
 
-The simplest strategy for general sequence learning is to map the input
-sequence to a fixed-sized vector using one RNN, and then to map the
-vector to the target sequence with another RNN (this approach has also been
-taken by Cho et al.~\cite{cho14}).  While it could work
-in principle since the RNN is provided with all the relevant
-information, it would be difficult to train the RNNs due to the
-resulting long term dependencies
-(figure \ref{fig:translation-model2})
-\cite{hochreiter_long_term,bengio_long_term,hochreiter97,Hochreiter01gradientflow}. However, the Long
-Short-Term Memory (LSTM) \cite{hochreiter97} is known to learn
-problems with long range temporal dependencies, so an LSTM may succeed
-in this setting.
+一般序列学习的简单策略是使用一个RNN将输入序列映射到固定大小的向量，然后用另一个RNN将固定向量映射到输出序列（(Cho等人\cite{cho14}也采用了这种方法)。虽然原则上它可以工作，但因为RNN提供了所有的相关信息并且存在长期依赖性，所以RNN难以训练(figure \ref{fig:translation-model2})
+\cite{hochreiter_long_term,bengio_long_term,hochreiter97,Hochreiter01gradientflow}。然而，已知长短期记忆神经网络(LSTM)\cite{hochreiter97}可以在学习中解决长时间依赖性的问题，因此LSTM在这一设定下会成功。
 
-The goal of the LSTM is to estimate the conditional probability
-$p(y_1,\ldots,y_{T'} | x_1,\ldots,x_T)$ where $(x_1,\ldots,x_T)$ is an
-input sequence and $y_1,\ldots,y_{T'}$ is its corresponding output
-sequence whose length $T'$ may differ from $T$. The LSTM computes this
-conditional probability by first obtaining the fixed-dimensional
-representation $v$ of the input sequence $(x_1,\ldots,x_T)$ given by
-the last hidden state of the LSTM, and then computing the probability
-of $y_1,\ldots,y_{T'}$ with a standard LSTM-LM formulation whose
-initial hidden state is set to the representation $v$ of
-$x_1,\ldots,x_T$:
+LSTM的目标是估计条件概率$p(y_1,\ldots,y_{T'} | x_1,\ldots,x_T)$,其中$(x_1,\ldots,x_T)$是输入序列，$y_1,\ldots,y_{T'}$是对应的输出序列并且长度$T'$可能不等于$T$，LSTM先通过最后一个隐藏层获得$(x_1,\ldots,x_T)$的固定维度的表示$v$来计算这一条件概率，然后用一个初始隐藏状态设置为$v$的标准LSTM-LM公式来计算$y_1,\ldots,y_{T'}$的概率：
 \begin{equation}
 p(y_1,\ldots,y_{T'} | x_1,\ldots,x_T) = \prod_{t=1}^{T'} p(y_t | v, y_1, \ldots, y_{t-1})
 \label{eqn:keyequation}
 \end{equation}
-In this equation, each $p(y_t | v, y_1, \ldots, y_{t-1})$ distribution
-is represented with a softmax over all the words in the
-vocabulary.  We use the LSTM formulation from Graves \cite{graves13c}.
-Note that we require that each sentence ends with a special
-end-of-sentence symbol ``$<$EOS$>$'', which enables the model to define a
-distribution over sequences of all possible lengths. The overall
-scheme is outlined in figure \ref{fig:translation-model2}, where the
-shown LSTM computes the representation of ``A'', ``B'', ``C'', ``$<$EOS$>$''
-and then uses this representation to compute the probability of ``W'',
-``X'', ``Y'', ``Z'', ``$<$EOS$>$''.
+在该等式中，每一个$p(y_t | v, y_1, \ldots, y_{t-1})$的分布用词汇表中所有单词进行的softmax来表示，我们使用Graves的LSTM公式\cite{graves13c}。我们要求每个句子以特殊的句尾符号``$<$EOS$>$''结束，这使得模型可以在任意长度的序列上来定义分布。总体的方法在图\ref{fig:translation-model2}中概述，其中表示的LSTM计算了``A'', ``B'', ``C''，``$<$EOS$>$''的表示，然后使用该表示来计算``W'',
+``X'', ``Y'', ``Z'', ``$<$EOS$>$''的概率。
 
-Our actual models differ from the above description in three important
-ways.  First, we used two different LSTMs: one for the input sequence
-and another for the output sequence, because doing so increases the
-number model parameters at negligible computational cost and makes it
-natural to train the LSTM on multiple language pairs simultaneously
-\cite{kal13}.  Second, we found that deep LSTMs significantly
-outperformed shallow LSTMs, so we chose an LSTM with four layers.
-Third, we found it extremely valuable to reverse the order of the
-words of the input sentence. So for example, instead of mapping the
-sentence $a,b,c$ to the sentence $\alpha, \beta, \gamma$, the LSTM is
-asked to map $c,b,a$ to $\alpha, \beta, \gamma$, where $\alpha, \beta,
-\gamma$ is the translation of $a,b,c$.  This way, $a$ is in close
-proximity to $\alpha$, $b$ is fairly close to $\beta$, and so on, a
-fact that makes it easy for SGD to ``establish communication'' between
-the input and the output.  We found this simple data transformation to
-greatly improve the performance of the LSTM.
+我们的实际模型有三个重要的方面不同于上面的描述。首先，我们使用两个不同的LSTM：一个用于输入序列，另一个用于输出序列，这样做可以以可忽略的计算成本增加模型参数的数量，并且非常自然地可以在多语言对上同时训练LSTM\cite{kal13}。第二，我们发现深层LSTM显着优于浅层LSTM，所以我们选择了一个有四层的LSTM。第三，我们发现扭转输入句子的顺序是非常有价值的。举个例子，不是将句子$a,b,c$映射到句子$\alpha,\beta,\gamma$，而是训练LSTM将$c,b,a$映射到$\alpha,\beta,\gamma$，其中$\alpha,\beta,\gamma$是$a,b,c$的翻译。这种方法使得$a$很接近$\alpha$，$b$很接近$\beta$，以此类推，这使得SGD容易在输入和输出之间“建立通信”。我们发现这个简单的数据转换大大提高了LSTM的性能。
 
 %% It may appear that the LSTM is incapable of translating long sentences
 %% \cite{bog14,curse,cho14}, which was also confirmed by our early
