@@ -1,68 +1,19 @@
-\section{Introduction}
+\section{简介}
 
-Deep Neural Networks (DNNs) are extremely powerful machine learning
-models that achieve excellent performance on difficult problems such
-as speech recognition \cite{hinton12,dahl12b} and visual object
-recognition \cite{kriz12,ciresan12,lecun98,le12}.  DNNs are
-powerful because they can perform arbitrary parallel computation for a
-modest number of steps.  A surprising example of the power of DNNs is
-their ability to sort $N$ \!\!\!\!\quad $N$-bit numbers using only 2
-hidden layers of quadratic size \cite{razborov}. So, while neural
-networks are related to conventional statistical models, they learn an
-intricate computation.  Furthermore, large DNNs can be trained with
-supervised backpropagation whenever the labeled training set has
-enough information to specify the network's parameters.  Thus, if
-there exists a parameter setting of a large DNN that achieves good
-results (for example, because humans can solve the task very rapidly),
-supervised backpropagation will find these parameters and solve the
-problem.
+深度神经网络（DNN）是非常强大的机器学习模型，在诸如语音识别 \cite{hinton12,dahl12b} 和视觉对象识别 \cite{kriz12,ciresan12,lecun98,le12} 等困难问题上取得了出色的性能。DNN很强大，因为它可以在适当数量的步骤内执行任意的并行计算。强大DNN的一个令人惊讶的例子是他们只使用2个隐藏层就能够排序$N$个 \!\!\!\!\quad $N$位数的能力\cite{razborov}。因此，虽然神经网络与常规统计模型相关，但他们能学习一个复杂的计算。
+此外当标记的训练集合具有足够的信息来指定网络的参数时，可以利用监督反向传播来训练大型的DNN。因此，如果存在实现良好结果的大型DNN的参数设置（例如，由于人类可以非常快速地解决任务），则监督反向传播将找到这些参数并解决问题。
 
-Despite their flexibility and power, DNNs can only be applied to
-problems whose inputs and targets can be sensibly encoded with vectors
-of fixed dimensionality.  It is a significant limitation, since many
-important problems are best expressed with sequences whose lengths are
-not known a-priori.  For example, speech recognition and machine
-translation are sequential problems.  Likewise, question answering can
-also be seen as mapping a sequence of words representing the question
-to a sequence of words representing the answer.  It is therefore clear
-that a domain-independent method that learns to map sequences to
-sequences would be useful.
+尽管DNN具有灵活性和强大的功能，但DNN只能应用于输入和输出都用固定维数的向量编码的问题。这存在一个明显的限制，因为许多重要的问题最好用长度不为已知的先验的序列表示。例如，语音识别和机器翻译是序列问题。同样，问题回答也可以被看作是将表示问题的单词序列映射到表示答案的单词序列。因此学习将序列映射到序列且不受领域限制的方法将是非常有用的。
 
-Sequences pose a challenge for DNNs because they require that the
-dimensionality of the inputs and outputs is known and fixed.  
+序列对DNN提出了挑战，因为DNN要求输入和输出的维数是已知的和固定的。
 %%And
 %%while Recurrent Neural Networks (RNNs) are natural candidates for this
 %%task, they assume that there is a one-to-one correspondence between
 %%the timesteps in the input and the output sequences, which is an
 %%unrealistic assumption for most problems.
-In this paper, we show that a straightforward application of the Long
-Short-Term Memory (LSTM) architecture \cite{hochreiter97} can solve
-general sequence to sequence problems.  The idea is to use one LSTM to
-read the input sequence, one timestep at a time, to obtain large
-fixed-dimensional vector representation, and then to use another LSTM
-to extract the output sequence from that vector
-(fig.~\ref{fig:translation-model2}).  The second LSTM is essentially a
-recurrent neural network language model
-\cite{rumelhart1986learning,mikolov2010recurrent,sundermeyer12} except
-that it is conditioned on the input sequence.  The LSTM's ability to
-successfully learn on data with long range temporal dependencies makes
-it a natural choice for this application due to the considerable time
-lag between the inputs and their corresponding outputs
-(fig.~\ref{fig:translation-model2}).
+在本文中，我们表明长短期记忆（LSTM）的结构\cite{hochreiter97}的应用可以解决一般序列到序列问题。该想法是使用一个LSTM读取输入序列，一次一个时间步长，来获得一个大的固定维度向量表示，然后使用另一个LSTM从该向量提取输出序列（图~\ref{fig:translation-model2}）。第二个LSTM除了它是以输入序列为条件，本质上是一个循环神经网络语言模型\cite{rumelhart1986learning,mikolov2010recurrent,sundermeyer12}。LSTM能够成功学习具有长时间依赖性数据的能力使得它成为这种应用的自然选择，因为输入及其相应输出之间存在相当大的时间滞后（图~\ref{fig:translation-model2}）。
 
-There have been a number of related attempts to address the general
-sequence to sequence learning problem with neural networks.   Our
-approach is closely related to Kalchbrenner and Blunsom \cite{kal13} who were
-the first to map the entire input sentence to vector, and is related 
-to Cho et al.~\cite{cho14} although the latter was used only for rescoring hypotheses
-produced by a phrase-based system.  Graves
-\cite{graves13c} introduced a novel differentiable attention mechanism
-that allows neural networks to focus on different parts
-of their input, and an elegant variant of this idea was successfully
-applied to machine translation by Bahdanau et al.~\cite{bog14}.  The Connectionist
-Sequence Classification is another popular technique for mapping sequences
-to sequences with neural networks, but it assumes a monotonic alignment
-between the inputs and the outputs \cite{graves1}.
+业界已经有许多相关的尝试，使用神经网络来解决一般的序列学习问题。我们的方法与Kalchbrenner和Blunsom\cite{kal13}的方法密切相关，他们是第一个将整个输入句子映射到向量的人，并且与Cho等人\cite{cho14}方法非常相似，尽管后者仅仅用于由一个基于短语的系统生成的rescoring hypotheses。Graves\cite{graves13c}引入了一种新的可区分的注意力机制，允许神经网络专注于输入的不同部分，这个想法的一个优雅的变体成功地应用于Bahdanau等人\cite{bog14}的机器翻译。连接序列分类是使用神经网络来将序列映射到序列的另一种流行的技术，尽管它假设输入和输出之间是单调对齐的\cite{graves1}。
 
 
 %% There have been a number of related attempts to address the general
@@ -83,53 +34,14 @@ between the inputs and the outputs \cite{graves1}.
 
 \begin{figure}[h]
 \centering \includegraphics[width=0.9\textwidth]{Diagram1.eps}
-\caption{\small Our model reads an input sentence ``ABC'' and produces
-  ``WXYZ'' as the output sentence.  The model stops making predictions
-  after outputting the end-of-sentence token.  Note that the LSTM
-  reads the input sentence in reverse, because doing so introduces
-  many short term dependencies in the data that make the optimization
-  problem much easier. }
+\caption{\small 我们的模型读取输入句子“ABC”，并产生“WXYZ”作为输出句子。 该模型在输出句尾标记之后停止进行预测。 请注意，LSTM反向读取输入句子，因为这样做会在数据中引入许多短期依赖性，使得优化问题更容易。 }
 \label{fig:translation-model2}
 \end{figure}
 
-The main result of this work is the following.  On the WMT'14 English
-to French translation task, we obtained a BLEU score of {\bf 34.81} by
-directly extracting translations from an ensemble of 5 deep LSTMs
-(with 384M parameters and 8,000 dimensional state each) using a simple left-to-right beam-search
-decoder.  This is by far the best result achieved by direct
-translation with large neural networks.  For comparison, the BLEU
-score of an SMT baseline on
-this dataset is 33.30 \cite{wmt14_en_fr}.  The
-34.81 BLEU score was achieved by an LSTM with a vocabulary of 80k
-words, so the score was penalized whenever the reference translation
-contained a word not covered by these 80k.  This result shows that a
-relatively unoptimized small-vocabulary neural network architecture which has much room
-for improvement outperforms a phrase-based SMT system.
+这项工作的主要结果如下。在WMT'14将英语翻译成法语的任务中，我们通过使用简单的从左到右的束搜索解码直接从5个深LSTM的集合（每个具有380M个参数）中提取翻译，获得{\bf 34.81}的BLEU得分。这是迄今为止通过使用大型神经网络直接翻译所获得的最佳结果。为了比较，该数据集上的SMT基线的BLEU得分为33.30\cite{wmt14_en_fr}。通过LSTM实现的34.81 BLEU分数，词汇为80k字，所以当参考翻译包含这80k字以外的单词时，分数将被惩罚。这个结果表明比基于成熟短语的SMT系统表现更好的相对未优化的神经网络结构还具有很大的改进空间。
 
-Finally, we used the LSTM to rescore the publicly available 1000-best
-lists of the SMT baseline on the same task \cite{wmt14_en_fr}.  By
-doing so, we obtained a BLEU score of 36.5, which improves the
-baseline by 3.2 BLEU points and is close to the previous best published
-result on this task (which is 37.0 \cite{durrani-EtAl:2014:W14-33}).
+最后我们使用LSTM重新计算相同任务的SMT基准的1000个公开最好的列表得分\cite{wmt14_en_fr}。通过这样做，我们获得了36.5的BLEU得分，这提高了基线3.2个BLEU点，并接近以前发表过的最先进的水平（这是37.0\cite{durrani-EtAl:2014:W14-33}）。
 
-Surprisingly, the LSTM did not suffer on very long sentences, despite
-the recent experience of other researchers with related architectures
-\cite{curse}.  We were able to do well on long sentences because we
-reversed the order of words in the source sentence but not the target
-sentences in the training and test set. By doing so, we introduced
-many short term dependencies that made the optimization problem much
-simpler (see sec.~\ref{sec:model} and \ref{sec:rev_rev}).  As a result, SGD could learn
-LSTMs that had no trouble with long sentences.  The simple trick of
-reversing the words in the source sentence is one of the key technical
-contributions of this work.
- 
-A useful property of the LSTM is that it learns to map an input
-sentence of variable length into a fixed-dimensional vector
-representation.  Given that translations tend to be paraphrases of the
-source sentences, the translation objective encourages the LSTM to
-find sentence representations that capture their meaning, as sentences
-with similar meanings are close to each other while different
-sentences meanings will be far. A qualitative evaluation supports
-this claim, showing that our model is aware of word order and is
-fairly invariant to the active and passive voice.
+令人惊讶的是，LSTM没有遭受长句子的困扰，尽管其他研究者用相关的模型的经验表明可能会受到长句子的困扰\cite{curse}。我们能够在长句子上做得很好是因为我们颠倒了输入语句中的单词顺序，而不颠倒训练和测试集中的输出句子。通过这样做，我们引入了许多短期依赖，使优化问题更简单（见第\ref{sec:model}和\ref{sec:rev_rev}节）。因此，随机梯度下降(SGD)可以学习对长句没有问题的LSTM。在源句子中逆转单词的顺序这个技巧是这项工作的关键技术贡献之一。
 
+LSTM的一个有用的属性是它可以学习将可变长度的输入语句映射成固定维度的向量表示。鉴于翻译往往是源语句的释义，翻译目标鼓励LSTM捕捉到其意义的句子表示，因为具有类似意义的句子彼此接近，而不同的句子意义将是远的。一个定性的评价支持表明我们的模型懂得词序，对于主动和被动语态是保持不变的。
