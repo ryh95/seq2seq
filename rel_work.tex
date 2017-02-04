@@ -1,46 +1,12 @@
-\section{Related work}
+\section{相关工作}
 \label{sec:rel_work}
 
-There is a large body of work on applications of neural networks to
-machine translation. So far, the simplest and most effective way of
-applying an RNN-Language Model (RNNLM) \cite{mikolov2010recurrent} or
-a Feedforward Neural Network Language Model (NNLM) \cite{bengio} to an
-MT task is by rescoring the n-best lists of a strong MT baseline
-\cite{mikolov2012}, which reliably improves translation quality.
+有大量的神经网络应用于机器翻译的工作。到目前为止，将RNN语言模型（RNNLM）\cite{mikolov2010recurrent}或前馈神经网络语言模型（NNLM）\cite{bengio}应用于机器翻译任务的最简单和最有效的方法是通过重新计算机器翻译基线的最优列表\cite{mikolov2012}，可以可靠地提高翻译质量。
 
-More recently, researchers have begun to look into ways of including
-information about the source language into the NNLM.  Examples of this
-work include Auli et al.~\cite{auli13}, who combine an NNLM with a
-topic model of the input sentence, which improves rescoring
-performance.  Devlin et al.~\cite{devlin14} followed a similar
-approach, but they incorporated their NNLM into the decoder of an MT
-system and used the decoder's alignment information to provide the
-NNLM with the most useful words in the input sentence.  Their approach
-was highly successful and it achieved large improvements over their
-baseline.
+最近，研究人员已经开始研究如何在NNLM中包含源语言的信息，这项工作的例子包括Auli等人\cite{auli13}，他们结合NNLM与输入句子的主题模型，这提高了重新评分的表现。Devlin等人\cite{devlin14}遵循类似的方法，但他们将他们的NNLM合并到机器翻译系统的解码器，并使用解码器的对齐信息为NNLM提供输入句子中最有用的词。他们的方法非常成功并且在基准上取得了很大的改进。
 
-Our work is closely related to Kalchbrenner and Blunsom \cite{kal13},
-who were the first to map the input sentence into a vector and then
-back to a sentence, although they map sentences to vectors using
-convolutional neural networks, which lose the ordering of the words.
-Similarly to this work, Cho et al.~\cite{cho14} used an LSTM-like RNN
-architecture to map sentences into vectors and back, although their
-primary focus was on integrating their neural network into an SMT
-system.  Bahdanau et al.~\cite{bog14} also attempted direct
-translations with a neural network that used an attention mechanism to
-overcome the poor performance on long sentences experienced by Cho et
-al.~\cite{cho14} and achieved encouraging results.  Likewise,
-Pouget-Abadie et al.~\cite{curse} attempted to address the memory
-problem of Cho et al.~\cite{cho14} by translating pieces of the source
-sentence in way that produces smooth translations, which is similar to
-a phrase-based approach.  We suspect that they could achieve similar
-improvements by simply training their networks on reversed source
-sentences.
+我们的工作与Kalchbrenner和Blunsom\cite{kal13}密切相关，他们是第一个将输入句子映射到一个向量然后回到一个句子的人，虽然他们使用卷积神经网络将句子映射到向量，这丢失了单词的排序
+。类似于这项工作，Cho等人\cite{cho14}使用类似LSTM的RNN架构将句子映射到向量再返回到句子，他们的主要焦点是将神经网络集成到SMT系统。Bahdanau等人\cite{bog14}也试图用神经网络直接翻译并且使用了注意机制克服Cho等人\cite{cho14}长句子上的不良表现并取得了令人鼓舞的成果。同样，Pouget-Abadie等人\cite{curse}试图解决Cho等人\cite{cho14}的记忆问题，他们通过翻译源语句的片段来获得平滑的翻译，这类似于基于短语的方法。我们怀疑他们可以在训练神经网络时通过反向源句子来实现类似的改进。
 
 
-End-to-end training is also the focus of Hermann et
-al.~\cite{hermann14}, whose model represents the inputs and outputs by
-feedforward networks, and map them to similar points in
-space. However, their approach cannot generate translations directly:
-to get a translation, they need to do a look up for closest vector in
-the pre-computed database of sentences, or to rescore a sentence.
+端对端训练也是Hermann等人\cite{hermann14}的焦点，其模型表示前馈网络的输入和输出，并将它们映射到空间中的类似点。然而他们的方法不能直接生成翻译：为了得到翻译，他们需要在预先计算的句子数据库中查找最接近的向量，或者重新定义句子。
