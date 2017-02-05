@@ -151,9 +151,7 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 			Ensemble of 5 reversed LSTMs, beam size 12  &  {\bf 34.81} \\ \hline
 		\end{tabular}
 	\end{small}
-	\caption{The performance of the LSTM on WMT'14 English to French test
-		set (ntst14).  Note that an ensemble of 5 LSTMs with a beam of size
-		2 is cheaper than of a single LSTM with a beam of size 12.  }
+	\caption{LSTM在WMT'14英语到法语测试集(ntst14)上的性能表现。注意5个束尺寸为2的LSTM的集成的开销小于单个束尺寸为12的LSTM。}
 	\label{tab:blue_fr}
 \end{table}
 
@@ -175,8 +173,7 @@ S$ 是训练集。一旦训练完成，我们根据LSTM找到最有可能的翻�
 			Oracle Rescoring of the Baseline 1000-best lists    & $\sim$45 \\ \hline 
 		\end{tabular}
 	\end{small}
-	\caption{Methods that use neural networks together with an SMT system
-		on the WMT'14 English to French test set (ntst14).}
+	\caption{使用神经网络和SMT系统在WMT'14英语到法语测试集(ntst14)的方法。}
 	\label{tab:blue_fr_rescore}
 \end{table}
 
@@ -325,12 +322,7 @@ Il y a , avec la cr\'{e}mation , `` une violence faite au corps aim\'{e} '' , \\
 \centering
 \includegraphics[width=0.46\textwidth]{figure2} ~~
 \includegraphics[width=0.46\textwidth]{figure3} 
-\caption{\small The figure shows a 2-dimensional PCA projection of the
-  LSTM hidden states that are obtained after processing the phrases in
-  the figures.  The phrases are clustered by meaning, which in these
-  examples is primarily a function of word order, which would be
-  difficult to capture with a bag-of-words model. Notice that both
-  clusters have similar internal structure.}
+\caption{\small 这张图展示了一个LSTM隐藏状态的2维PCA投影，这个LSTM隐藏状态由处理了图中的短语后获得。这些短语由他们的含义而聚集在一起，含义在这里是示例短语的单词顺序的函数，这一点词袋模型(bag-of-words model)难以获取。注意到这两个聚类有相似的内部结构。}
 \label{fig:embedding}
 \end{figure}
 
@@ -338,14 +330,7 @@ Il y a , avec la cr\'{e}mation , `` une violence faite au corps aim\'{e} '' , \\
 \begin{figure}[h!]
 \centerline{
 \includegraphics[width=1.\textwidth]{good2.eps} }  
-\caption{\small The left plot shows the performance of our system as a
-  function of sentence length, where the x-axis corresponds to the
-  test sentences sorted by their length and is marked by the actual
-  sequence lengths.  There is no degradation on sentences with less
-  than 35 words, there is only a minor degradation on the longest
-  sentences.  The right plot shows the LSTM's performance on sentences
-  with progressively more rare words, where the x-axis corresponds to
-  the test sentences sorted by their ``average word frequency rank''.
+\caption{\small 左边的图显示了我们系统随着句子长度变化而变化的性能，其中x坐标对应于测试的句子，这些句子已经根据它们的长度排了序并且标记了实际的序列长度。系统性能没有在小于35个单词的句子上退化，只有在最长的句子上性能有很小的退化。右图显示了LSTM在少见单词逐渐增加的句子上的性能，其中x坐标对应于测试的句子，这些句子由它们``平均词频排名''而排序。
 }
 \label{fig:oriol}
 \end{figure}
